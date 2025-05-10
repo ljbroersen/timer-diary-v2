@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+@import "tailwindcss";
+
+#root {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+  }
+
+  :root {
+
+    /* branding colors */
+    --color-primary: 130 137 164; 
+    --color-secondary: 180 140 210;
+    --color-tertiary: 221 205 190;
+    --color-primary-inverted: 255 255 255;
+    --color-primary-hover: 80 160 210;
+    --color-secondary-inverted: 255 255 255;
+    --color-secondary-hover: 160 120 190;
+
+    /* text colors */
+    --color-text-base: 250 250 250;
+    --color-text-muted: 120 120 120;
+    --color-text-inverted: 255 255 255;
+
+    /* background colors */
+    --color-bg-primary: 0 0 0;
+    --color-bg-secondary: 22 21 34;
+    --color-bg-tertiary: 30	29 46;
+
+    /* status colors */
+    --color-error: 220 90 90;
+  }
+
+  h1 {
+    font-family: 'Nunito', sans-serif;
+    margin-bottom: 5px;
+    margin-top: 20px;
+  }
+
+  h2, h3, h4, h5, h6 {
+    font-family: 'Nunito', sans-serif;
+    margin-bottom: 5px;
+    margin-top: 10px;
+  }
+
+  body {
+    font-family: sans-serif;
+  }
