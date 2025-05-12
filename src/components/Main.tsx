@@ -1,25 +1,24 @@
 import Diary from "./Diary";
+import Navigation from "./Navigation";
 import Timer from "./Timer";
 
-function Main() {
+export default function Main() {
   return (
-    <div className="min-h-screen grid grid-cols-[250px_1fr] mx-12 mb-12 bg-[rgb(var(--color-bg-primary))] text-[rgb(var(--color-text-base))]">
+    <div className="min-h-screen grid grid-cols-[400px_1fr] mx-12 mb-12 bg-[rgb(var(--color-bg-primary))] text-[rgb(var(--color-text-base))]">
       
       <nav className="bg-[rgb(var(--color-bg-secondary))] p-4">
-        Text
+        <Navigation />
       </nav>
 
       <div className="flex flex-col min-h-screen">
-        <div className="bg-[rgb(var(--color-bg-secondary))] p-4 h-1/2">
-        <Timer />
+        <div className="bg-[rgb(var(--color-bg-secondary))] p-4 h-1/2 flex justify-center items-center">
+          <Timer />
         </div>
-        <div className="bg-[rgb(var(--color-bg-secondary))] p-4 h-1/2">
-        <Diary />
+        <div className="bg-[rgb(var(--color-bg-secondary))] p-4 h-1/2 flex justify-center items-center">
+          <Diary />
         </div>
       </div>
 
     </div>
   );
 }
-
-export default Main;
