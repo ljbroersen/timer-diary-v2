@@ -11,7 +11,7 @@ export default function Main() {
       </nav>
 
       <div className="flex flex-col min-h-screen">
-        <div className="bg-[rgb(var(--color-bg-secondary))] p-4 h-1/2 flex justify-center items-center">
+        <div className="bg-[rgb(var(--color-bg-secondary))] p-4 h-1/2 flex justify-center text-center">
           <Timer />
         </div>
         <div className="bg-[rgb(var(--color-bg-secondary))] p-4 h-1/2 flex justify-center items-center">

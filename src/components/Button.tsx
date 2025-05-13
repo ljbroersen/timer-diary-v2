@@ -8,7 +8,7 @@ interface ButtonProps {
 export default function Button({ onClick, children }: Readonly<ButtonProps>) {
   return (
     <button
-      className="p-3 cursor-pointer"
+      className="p-3 px-4 cursor-pointer bg-[rgb(var(--color-tertiary))] hover:bg-[rgb(var(--color-primary-hover))]"
       onClick={onClick}
     >
       {children}
