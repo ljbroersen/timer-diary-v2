@@ -12,7 +12,7 @@
 
     /* branding colors */
     --color-primary: 130 137 164; 
-    --color-secondary: 180 140 210;
+    --color-secondary: 221 235 157;
     --color-tertiary: 221 205 190;
     --color-primary-inverted: 255 255 255;
     --color-primary-hover: 80 160 210;
@@ -20,14 +20,14 @@
     --color-secondary-hover: 160 120 190;
 
     /* text colors */
-    --color-text-base: 250 250 250;
+    --color-text-base: 0 0 0;
     --color-text-muted: 120 120 120;
     --color-text-inverted: 255 255 255;
 
     /* background colors */
-    --color-bg-primary: 0 0 0;
-    --color-bg-secondary: 22 21 34;
-    --color-bg-tertiary: 30	29 46;
+    --color-bg-primary: 250 250 250;
+    --color-bg-secondary: 160 200 120;
+    --color-bg-tertiary: 112 140 84;
 
     /* status colors */
     --color-error: 220 90 90;
@@ -44,6 +44,7 @@
     font-family: 'Nunito', sans-serif;
     margin-bottom: 5px;
     margin-top: 10px;
+    font-size: 28px;
   }
 
   body {
