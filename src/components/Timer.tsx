@@ -3,29 +3,27 @@ import { useState } from "react";
 import "../index.css";
 import Button from "./Button";
 
-
 interface MyTimerProps {
   expiryTimestamp?: Date;
   onRestart?: (difference: string, description: string) => void;
 }
 
-export default function Timer({
-  expiryTimestamp,
-  onRestart,
-}: Readonly<MyTimerProps>) {
+export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerProps>) {
   const [showInputs, setShowInputs] = useState<boolean>(true);
   const [customTime, setCustomTime] = useState({
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
+  const [title, setTitle] = useState<string>("");
   const [timerDescription, setTimerDescription] = useState<string>("");
 
-  const { seconds, minutes, hours, isRunning, start, pause, resume, restart } =
-    useTimer({
-      expiryTimestamp: expiryTimestamp || new Date(),
-      // onExpire: () => alert("Finished!"),
-    });
+  const [tasks, setTasks] = useState<Array<{ text: string; checked: boolean }>>([]);
+  const [newTaskText, setNewTaskText] = useState<string>("");
+
+  const { seconds, minutes, hours, isRunning, start, pause, resume, restart } = useTimer({
+    expiryTimestamp: expiryTimestamp || new Date(),
+  });
 
   const handleStart = () => {
     if (showInputs) {
@@ -43,9 +41,7 @@ export default function Timer({
   const handleRestart = () => {
     const leftoverTimeInMs = hours * 3600000 + minutes * 60000 + seconds * 1000;
     const customTimeInMs =
-      customTime.hours * 3600000 +
-      customTime.minutes * 60000 +
-      customTime.seconds * 1000;
+      customTime.hours * 3600000 + customTime.minutes * 60000 + customTime.seconds * 1000;
 
     const differenceInMs = customTimeInMs - leftoverTimeInMs;
 
@@ -69,13 +65,32 @@ export default function Timer({
 
     setShowInputs(true);
     setTimerDescription("");
+    setTitle("");
+    setTasks([]);
   };
 
- return (
+  const handleAddTask = () => {
+    if (newTaskText.trim() !== "") {
+      setTasks([...tasks, { text: newTaskText.trim(), checked: false }]);
+      setNewTaskText("");
+    }
+  };
+
+  const toggleTaskChecked = (index: number) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index].checked = !updatedTasks[index].checked;
+    setTasks(updatedTasks);
+  };
+
+  const handleDeleteTask = (index: number) => {
+    const updatedTasks = [...tasks];
+    updatedTasks.splice(index, 1);
+    setTasks(updatedTasks);
+  };
+
+  return (
     <div>
-        <p className="mb-5">
-            <h2>Timer</h2>
-        </p>
+      <h2 className="mb-5">Timer</h2>
       {showInputs ? (
         <div>
           <input
@@ -114,8 +129,20 @@ export default function Timer({
               })
             }
           />
+
           <p className="m-2">
-            <h2>Description of activity</h2>
+            <strong>Title</strong>
+          </p>
+          <input
+            type="text"
+            className="ml-2 mr-2 mb-2 p-2 w-full max-w-xl bg-[rgb(var(--color-secondary))]"
+            placeholder="Title for this entry"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+
+          <p className="m-2">
+            <strong>Description of activity</strong>
           </p>
           <textarea
             className="ml-2 mr-2 mb-2 p-2 w-full max-w-xl bg-[rgb(var(--color-secondary))]"
@@ -126,12 +153,46 @@ export default function Timer({
             wrap="soft"
           />
 
-          <br />
+          <p className="m-2">
+            <strong>Subtasks</strong>
+          </p>
+          <div className="ml-2 my-2">
+            {tasks.map((task, index) => (
+              <div key={index} className="flex items-center gap-2 my-2">
+                <input
+                  type="checkbox"
+                  checked={task.checked}
+                  onChange={() => toggleTaskChecked(index)}
+                />
+                <span className={task.checked ? "line-through" : ""}>{task.text}</span>
+                {showInputs && (
+                  <button
+                    className="text-red-500 hover:underline"
+                    onClick={() => handleDeleteTask(index)}
+                  >
+                    X
+                  </button>
+                )}
+              </div>
+            ))}
+            <div className="flex gap-2 my-4">
+              <input
+                type="text"
+                className="p-1 bg-[rgb(var(--color-secondary))] flex-1"
+                placeholder="New task"
+                value={newTaskText}
+                onChange={(e) => setNewTaskText(e.target.value)}
+              />
+              <Button onClick={handleAddTask}>Add</Button>
+            </div>
+          </div>
+
           <Button onClick={handleStart}>Start</Button>
         </div>
       ) : (
         <div>
-          <div className="">
+          <div>
+            <h3 className="text-lg font-semibold mb-2">{title}</h3>
             <span>
               {`${hours.toString().padStart(2, "0")}:${minutes
                 .toString()
@@ -139,7 +200,7 @@ export default function Timer({
             </span>
           </div>
 
-          <p className="">{isRunning ? "Running" : "Not running"}</p>
+          <p>{isRunning ? "Running" : "Not running"}</p>
           <Button onClick={pause}>Pause</Button>
           <Button onClick={resume}>Resume</Button>
           <Button onClick={handleRestart}>Restart</Button>

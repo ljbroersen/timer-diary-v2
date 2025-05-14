@@ -1,7 +1,3 @@
 export default function Diary() {
-    return (
-        <div>
-            Text
-        </div>
-    )
+  return <div>Text</div>;
 }
