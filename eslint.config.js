@@ -35,9 +35,7 @@ export default defineConfig([
         version: "detect",
       },
     },
-    extends: [
-      configPrettier,
-    ],
+    extends: [configPrettier, "plugin:react/recommended", "plugin:@typescript-eslint/recommended"],
   },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,

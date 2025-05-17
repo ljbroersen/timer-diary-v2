@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start": "node ./server/app.js",
     "build": "tsc -b && vite build",
+    "migrate-latest": "npx knex migrate:latest --knexfile ./knexfile.js",
+    "migrate-down": "npx knex migrate:down --knexfile ./knexfile.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "preview": "vite preview"
@@ -13,6 +16,10 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.6",
     "@tanstack/react-query": "^5.76.0",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
+    "@types/knex": "^0.15.2",
+    "@types/pg": "^8.15.2",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",

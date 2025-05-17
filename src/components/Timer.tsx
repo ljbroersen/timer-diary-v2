@@ -5,7 +5,12 @@ import Button from "./Button";
 
 interface MyTimerProps {
   expiryTimestamp?: Date;
-  onRestart?: (difference: string, description: string) => void;
+  onRestart?: (
+    difference: string,
+    title: string,
+    description: string,
+    tasks: { text: string; checked: boolean }[]
+  ) => void;
 }
 
 export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerProps>) {
@@ -60,7 +65,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
     const currentDescription = timerDescription;
 
     if (onRestart) {
-      onRestart(difference, currentDescription);
+      onRestart(difference, title, currentDescription, tasks);
     }
 
     setShowInputs(true);
@@ -130,7 +135,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             }
           />
 
-          <p className="m-2">
+          <p className="my-4">
             <strong>Title</strong>
           </p>
           <input
@@ -141,7 +146,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             onChange={(e) => setTitle(e.target.value)}
           />
 
-          <p className="m-2">
+          <p className="my-4">
             <strong>Description of activity</strong>
           </p>
           <textarea
@@ -153,7 +158,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             wrap="soft"
           />
 
-          <p className="m-2">
+          <p className="my-4">
             <strong>Subtasks</strong>
           </p>
           <div className="ml-2 my-2">
