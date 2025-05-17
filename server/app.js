@@ -92,6 +92,26 @@ app.post("/logs/create", async (req, res) => {
   }
 });
 
+app.patch("/logs/:id", async (req, res) => {
+  const { id } = req.params;
+  const { tasks } = req.body;
+
+  if (!Array.isArray(tasks)) {
+    return res.status(400).json({ message: "Invalid tasks format" });
+  }
+
+  try {
+    await knex("logs_table")
+      .where({ id })
+      .update({ tasks: JSON.stringify(tasks) });
+
+    res.status(200).json({ message: "Tasks updated successfully" });
+  } catch (error) {
+    console.error("Error updating tasks:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });

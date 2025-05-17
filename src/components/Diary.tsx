@@ -30,6 +30,7 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
   const logsPerPage = 2;
 
   useEffect(() => {
+    // Fetch Dates on mount
     const fetchDates = async () => {
       try {
         const response = await fetch(`${URL}/dates`);
@@ -76,6 +77,55 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
     fetchLogs();
   }, [URL, date]);
 
+ const renderTasksList = (logItem: LogItem) => {
+  const handleTaskToggle = async (taskIndex: number) => {
+    const updatedTasks = [...logItem.tasks];
+    updatedTasks[taskIndex] = {
+      ...updatedTasks[taskIndex],
+      checked: !updatedTasks[taskIndex].checked,
+    };
+
+    setLogs((prevLogs) =>
+      prevLogs.map((log) =>
+        log.id === logItem.id ? { ...log, tasks: updatedTasks } : log
+      )
+    );
+
+    try {
+      const response = await fetch(`${URL}/logs/${logItem.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tasks: updatedTasks }),
+      });
+
+      if (!response.ok) {
+        console.error("Failed to update tasks, status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error updating tasks:", error);
+    }
+  };
+
+  return (
+    <ul className="list-disc ml-5">
+      {logItem.tasks.map((task, i) => (
+        <li key={i}>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={task.checked}
+              onChange={() => handleTaskToggle(i)}
+            />
+            <span className={task.checked ? "line-through text-gray-300" : ""}>
+              {task.text}
+            </span>
+          </label>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
   const showMoreLogs = () => {
     setVisibleLogIndex((prev) => Math.min(prev + logsPerPage, logs.length - logsPerPage));
   };
@@ -105,20 +155,14 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
               key={logItem.id}
               className="p-4 [&:nth-child(even)]:bg-emerald-900 [&:nth-child(odd)]:bg-emerald-800 relative"
             >
-              <span className="absolute top-2 right-4 cursor-pointer">x</span>
               <h3 className="font-bold text-lg mb-1">{logItem.title}</h3>
               <p>⏱ Time Left: {logItem.timer_leftover}</p>
               <p className="whitespace-pre-wrap mt-1 mb-2">📘 {logItem.description}</p>
               {Array.isArray(logItem.tasks) && logItem.tasks.length > 0 && (
                 <div>
                   <p className="font-semibold">✅ Tasks:</p>
-                  <ul className="list-disc ml-5">
-                    {logItem.tasks.map((task, i) => (
-                      <li key={i} className={task.checked ? "line-through text-gray-300" : ""}>
-                        {task.text}
-                      </li>
-                    ))}
-                  </ul>
+                  {renderTasksList(logItem)}
+
                 </div>
               )}
             </div>

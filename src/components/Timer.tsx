@@ -38,6 +38,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
       newExpiryTime.setSeconds(newExpiryTime.getSeconds() + customTime.seconds);
       restart(newExpiryTime);
       setShowInputs(false);
+      start();
     } else {
       start();
     }
@@ -74,13 +75,6 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
     setTasks([]);
   };
 
-  const handleAddTask = () => {
-    if (newTaskText.trim() !== "") {
-      setTasks([...tasks, { text: newTaskText.trim(), checked: false }]);
-      setNewTaskText("");
-    }
-  };
-
   const toggleTaskChecked = (index: number) => {
     const updatedTasks = [...tasks];
     updatedTasks[index].checked = !updatedTasks[index].checked;
@@ -96,8 +90,9 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
   return (
     <div>
       <h2 className="mb-5">Timer</h2>
-      {showInputs ? (
-        <div>
+
+      {showInputs && (
+        <>
           <input
             type="number"
             className="ml-2 mr-2 p-2 bg-[rgb(var(--color-secondary))]"
@@ -157,43 +152,58 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             rows={4}
             wrap="soft"
           />
+        </>
+      )}
 
-          <p className="my-4">
-            <strong>Subtasks</strong>
-          </p>
-          <div className="ml-2 my-2">
-            {tasks.map((task, index) => (
-              <div key={index} className="flex items-center gap-2 my-2">
-                <input
-                  type="checkbox"
-                  checked={task.checked}
-                  onChange={() => toggleTaskChecked(index)}
-                />
-                <span className={task.checked ? "line-through" : ""}>{task.text}</span>
-                {showInputs && (
-                  <button
-                    className="text-red-500 hover:underline"
-                    onClick={() => handleDeleteTask(index)}
-                  >
-                    X
-                  </button>
-                )}
-              </div>
-            ))}
-            <div className="flex gap-2 my-4">
-              <input
-                type="text"
-                className="p-1 bg-[rgb(var(--color-secondary))] flex-1"
-                placeholder="New task"
-                value={newTaskText}
-                onChange={(e) => setNewTaskText(e.target.value)}
-              />
-              <Button onClick={handleAddTask}>Add</Button>
-            </div>
+      <p className="my-4">
+        <strong>Subtasks</strong>
+      </p>
+      <div className="ml-2 my-2">
+        {tasks.map((task, index) => (
+          <div key={index} className="flex items-center gap-2 my-2">
+            <input
+              type="checkbox"
+              checked={task.checked}
+              onChange={() => toggleTaskChecked(index)}
+              disabled={false}
+            />
+            <span className={task.checked ? "line-through" : ""}>{task.text}</span>
+            {showInputs && (
+              <button
+                className="text-red-500 hover:underline"
+                onClick={() => handleDeleteTask(index)}
+              >
+                X
+              </button>
+            )}
           </div>
+        ))}
 
-          <Button onClick={handleStart}>Start</Button>
-        </div>
+        {showInputs && (
+          <div className="flex gap-2 my-4">
+            <input
+              type="text"
+              className="p-1 bg-[rgb(var(--color-secondary))] flex-1"
+              placeholder="New task"
+              value={newTaskText}
+              onChange={(e) => setNewTaskText(e.target.value)}
+            />
+            <Button
+              onClick={() => {
+                if (newTaskText.trim() !== "") {
+                  setTasks([...tasks, { text: newTaskText.trim(), checked: false }]);
+                  setNewTaskText("");
+                }
+              }}
+            >
+              Add
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {showInputs ? (
+        <Button onClick={handleStart}>Start</Button>
       ) : (
         <div>
           <div>
