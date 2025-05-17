@@ -19,25 +19,35 @@ app.get("/dates", async (req, res) => {
 });
 
 app.get("/logs", async (req, res) => {
-  const { dateId } = req.query;
+  const { date } = req.query;
 
-  if (!dateId || typeof dateId !== "string") {
-    res.status(400).json({ message: "Invalid or missing dateId parameter" });
+  if (!date || typeof date !== "string") {
+    res.status(400).json({ message: "Invalid or missing date parameter" });
     return;
   }
 
   try {
-    const logs = await knex("logs_table").where("date_id", dateId);
+    const dateRecord = await knex("date_table").where({ date }).first();
+
+    if (!dateRecord) {
+      res.json([]);
+      return;
+    }
+
+    const logs = await knex("logs_table").where("date_id", dateRecord.id);
+
     const parsedLogs = logs.map((log) => ({
       ...log,
-      tasks: log.tasks ? JSON.parse(log.tasks) : [],
+      tasks: typeof log.tasks === "string" ? JSON.parse(log.tasks) : log.tasks ?? [],
     }));
+
     res.json(parsedLogs);
   } catch (error) {
     console.error("Error fetching logs:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 app.post("/logs/create", async (req, res) => {
   const { date, timer_leftover, description, title, tasks } = req.body;

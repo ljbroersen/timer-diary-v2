@@ -60,7 +60,7 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
       if (!date) return;
 
       try {
-        const response = await fetch(`${URL}/logs?dateId=${date.id}`);
+        const response = await fetch(`${URL}/logs?date=${date.date}`);
         if (response.ok) {
           const data: LogItem[] = await response.json();
           setLogs(data);
@@ -89,7 +89,7 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
   return (
     <div className="flex flex-col 2xl:h-[490px] sm-h-screen sm:mb-10">
       <h2 className="underline-offset-8 underline decoration-white decoration-2">
-        Log for {date.date}
+        Logs for {date.date}
       </h2>
 
       <div className="flex justify-center sticky top-0 z-10 p-2">
