@@ -13,6 +13,8 @@ export default function Main() {
   const [addLog, setAddLog] = useState<((log: LogItem) => void) | null>(null);
   const [dates, setDates] = useState<DateRecord[]>([]);
   const [selectedDate, setSelectedDate] = useState<DateRecord | null>(null);
+  const [selectedCalendarDate, setSelectedCalendarDate] = useState<Date | null>(new Date());
+
 
   const createLogMutation = useMutation({
     mutationFn: async (newLog: {
@@ -85,31 +87,27 @@ export default function Main() {
     });
   };
 
-  const handleDateClick = (date: DateRecord) => {
-    setSelectedDate(date);
-  };
-
   const handleBackToTimer = () => {
     setSelectedDate(null);
   };
 
+  function formatDate(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(
+    date.getDate()
+  ).padStart(2, "0")}`;
+}
+
   return (
     <div className="min-h-screen grid grid-cols-[400px_1fr] mx-12 mb-12 bg-[rgb(var(--color-bg-primary))] text-[rgb(var(--color-text-base))]">
       <nav className="bg-[rgb(var(--color-bg-secondary))] p-4">
-        <Navigation />
-        <h2 className="mt-6 mb-2 font-semibold">Your Dates</h2>
-        <ul className="space-y-2">
-          {dates.map((date) => (
-            <li key={date.id}>
-              <button
-                onClick={() => handleDateClick(date)}
-                className="underline text-blue-500 hover:text-blue-700"
-              >
-                {date.date}
-              </button>
-            </li>
-          ))}
-        </ul>
+        <Navigation
+          dates={dates}
+          selectedDate={selectedCalendarDate}
+          setSelectedDate={(date) => {
+          setSelectedCalendarDate(date);
+          setSelectedDate({ id: -1, date: formatDate(date) }); // This is still valid for your logs
+            }}
+        />
       </nav>
 
       <div className="flex flex-col min-h-screen bg-[rgb(var(--color-bg-secondary))] px-6 pt-6">

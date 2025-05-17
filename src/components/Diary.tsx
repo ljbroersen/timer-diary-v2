@@ -87,12 +87,12 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
   const visibleLogs = logs.slice(visibleLogIndex, visibleLogIndex + logsPerPage);
 
   return (
-    <div className="flex flex-col border-2 border-emerald-800 bg-emerald-700 2xl:h-[490px] sm-h-screen sm:mb-10">
+    <div className="flex flex-col 2xl:h-[490px] sm-h-screen sm:mb-10">
       <h2 className="underline-offset-8 underline decoration-white decoration-2">
         Log for {date.date}
       </h2>
 
-      <div className="flex justify-center sticky top-0 bg-emerald-700 z-10 p-2">
+      <div className="flex justify-center sticky top-0 z-10 p-2">
         {visibleLogIndex > 0 && <ArrowUp onClick={showPreviousLogs} />}
       </div>
 
@@ -126,7 +126,7 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
         )}
       </div>
 
-      <div className="flex justify-center sticky bottom-0 bg-emerald-700 z-10 p-2">
+      <div className="flex justify-center sticky bottom-0 z-10 p-2">
         {visibleLogIndex + logsPerPage < logs.length && <ArrowDown onClick={showMoreLogs} />}
       </div>
     </div>
