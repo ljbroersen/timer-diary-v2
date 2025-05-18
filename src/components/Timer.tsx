@@ -89,7 +89,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
 
   return (
     <div>
-      <h2 className="mb-5">Timer</h2>
+      <h2 className="mb-4">Timer</h2>
 
       {showInputs && (
         <>
@@ -131,7 +131,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
           />
 
           <p className="my-4">
-            <strong>Title</strong>
+            <h3>Title</h3>
           </p>
           <input
             type="text"
@@ -142,10 +142,10 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
           />
 
           <p className="my-4">
-            <strong>Description of activity</strong>
+            <h3>Description of activity</h3>
           </p>
           <textarea
-            className="ml-2 mr-2 mb-2 p-2 w-full max-w-xl bg-[rgb(var(--color-secondary))]"
+            className="mx-2 p-2 w-full max-w-xl bg-[rgb(var(--color-secondary))]"
             placeholder="What are you going to do?"
             value={timerDescription}
             onChange={(e) => setTimerDescription(e.target.value)}
@@ -155,9 +155,11 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
         </>
       )}
 
-      <p className="my-4">
-        <strong>Subtasks</strong>
-      </p>
+      {(tasks.length > 0 || showInputs) && (
+        <p className="my-4">
+          <h3>Subtasks</h3>
+        </p>
+      )}
       <div className="ml-2 my-2">
         {tasks.map((task, index) => (
           <div key={index} className="flex items-center gap-2 my-2">
@@ -169,12 +171,11 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             />
             <span className={task.checked ? "line-through" : ""}>{task.text}</span>
             {showInputs && (
-              <button
-                className="text-red-500 hover:underline"
+              <Button variant="danger"
                 onClick={() => handleDeleteTask(index)}
               >
                 X
-              </button>
+              </Button>
             )}
           </div>
         ))}
@@ -207,19 +208,19 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
       ) : (
         <div>
           <div>
-            <h3 className="text-lg font-semibold mb-2">{title}</h3>
-            <span>
+            <h3>{title}</h3>
+            <p className="text-5xl my-2">
               {`${hours.toString().padStart(2, "0")}:${minutes
                 .toString()
                 .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`}
-            </span>
+            </p>
+            <p className="my-4">{isRunning ? "Running" : "Not running"}</p>
           </div>
-
-          <p>{isRunning ? "Running" : "Not running"}</p>
-          <Button onClick={pause}>Pause</Button>
-          <Button onClick={resume}>Resume</Button>
-          <Button onClick={handleRestart}>Restart</Button>
-        </div>
+          <div>
+          <Button onClick={pause} variant="primary">Pause</Button>
+          <Button onClick={resume} variant="primary">Resume</Button>
+          <Button onClick={handleRestart} variant="primary">Restart</Button>
+        </div></div>
       )}
     </div>
   );

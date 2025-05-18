@@ -4,6 +4,7 @@ import Diary, { type LogItem, type DateRecord } from "./Diary";
 import Navigation from "./Navigation";
 import { port } from "../../server/config";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Button from "./Button";
 
 const URL = `http://localhost:${port}`;
 
@@ -117,12 +118,9 @@ export default function Main() {
           </div>
         ) : (
           <>
-            <button
-              onClick={handleBackToTimer}
-              className="self-start mb-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
-            >
+            <Button onClick={handleBackToTimer} variant="secondary">
               ← Back to Timer
-            </button>
+            </Button>
             <Diary URL={URL} date={selectedDate} setDiaryDates={setDates} setAddLog={setAddLog} />
           </>
         )}

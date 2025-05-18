@@ -138,9 +138,9 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
 
   return (
     <div className="flex flex-col 2xl:h-[490px] sm-h-screen sm:mb-10">
-      <h2 className="underline-offset-8 underline decoration-white decoration-2">
+      <h3 className="underline-offset-8 underline decoration-white decoration-2">
         Logs for {date.date}
-      </h2>
+      </h3>
 
       <div className="flex justify-center sticky top-0 z-10 p-2">
         {visibleLogIndex > 0 && <ArrowUp onClick={showPreviousLogs} />}
@@ -153,7 +153,7 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
           visibleLogs.map((logItem) => (
             <div
               key={logItem.id}
-              className="p-4 [&:nth-child(even)]:bg-emerald-900 [&:nth-child(odd)]:bg-emerald-800 relative"
+              className="p-4 bg-[rgb(var(--color-bg-tertiary))] relative"
             >
               <h3 className="font-bold text-lg mb-1">{logItem.title}</h3>
               <p>⏱ Time Left: {logItem.timer_leftover}</p>
