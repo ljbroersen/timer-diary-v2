@@ -25,6 +25,7 @@
   font-weight: bold;
   padding: 8px 10px;
   cursor: pointer;
+  margin: 2px;
 }
 
 .react-calendar__navigation button:hover {

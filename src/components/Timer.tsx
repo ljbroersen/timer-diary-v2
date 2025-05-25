@@ -130,20 +130,20 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             }
           />
 
-          <p className="my-4">
+          <div className="my-4">
             <h3>Title</h3>
-          </p>
+          
           <input
             type="text"
             className="ml-2 mr-2 mb-2 p-2 w-full max-w-xl bg-[rgb(var(--color-secondary))]"
             placeholder="Title for this entry"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-          />
+          /></div>
 
-          <p className="my-4">
+          <div className="my-4">
             <h3>Description of activity</h3>
-          </p>
+          
           <textarea
             className="mx-2 p-2 w-full max-w-xl bg-[rgb(var(--color-secondary))]"
             placeholder="What are you going to do?"
@@ -151,15 +151,14 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             onChange={(e) => setTimerDescription(e.target.value)}
             rows={4}
             wrap="soft"
-          />
+          /></div>
         </>
       )}
 
       {(tasks.length > 0 || showInputs) && (
-        <p className="my-4">
+        <div className="my-4">
           <h3>Subtasks</h3>
-        </p>
-      )}
+        
       <div className="ml-2 my-2">
         {tasks.map((task, index) => (
           <div key={index} className="flex items-center gap-2 my-2">
@@ -202,6 +201,8 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
           </div>
         )}
       </div>
+      </div>
+      )}
 
       {showInputs ? (
         <Button onClick={handleStart}>Start</Button>

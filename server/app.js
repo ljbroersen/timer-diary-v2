@@ -94,20 +94,21 @@ app.post("/logs/create", async (req, res) => {
 
 app.patch("/logs/:id", async (req, res) => {
   const { id } = req.params;
-  const { tasks } = req.body;
+  const { tasks, description } = req.body;
 
-  if (!Array.isArray(tasks)) {
-    return res.status(400).json({ message: "Invalid tasks format" });
+  const updateData = {};
+  if (Array.isArray(tasks)) updateData.tasks = JSON.stringify(tasks);
+  if (typeof description === "string") updateData.description = description;
+
+  if (Object.keys(updateData).length === 0) {
+    return res.status(400).json({ message: "No valid fields to update" });
   }
 
   try {
-    await knex("logs_table")
-      .where({ id })
-      .update({ tasks: JSON.stringify(tasks) });
-
-    res.status(200).json({ message: "Tasks updated successfully" });
+    await knex("logs_table").where({ id }).update(updateData);
+    res.status(200).json({ message: "Log updated successfully" });
   } catch (error) {
-    console.error("Error updating tasks:", error);
+    console.error("Error updating log:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
