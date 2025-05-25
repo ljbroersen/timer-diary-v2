@@ -113,6 +113,23 @@ app.patch("/logs/:id", async (req, res) => {
   }
 });
 
+app.delete("/logs/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedCount = await knex("logs_table").where({ id }).del();
+
+    if (deletedCount === 0) {
+      return res.status(404).json({ message: "Log not found" });
+    }
+
+    res.status(204).send();
+  } catch (error) {
+    console.error("Error deleting log:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });

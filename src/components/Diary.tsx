@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ArrowDown } from "./ArrowDown";
 import { ArrowUp } from "./ArrowUp";
+import Button from "./Button";
 
 interface MyLogProps {
   URL: string;
@@ -93,6 +94,21 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
     },
   });
 
+  const deleteLogMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`${URL}/logs/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete log");
+      return id;
+    },
+    onSuccess: (deletedId) => {
+      queryClient.setQueryData<LogItem[]>(["logs", date?.date], (old) =>
+        (old || []).filter((log) => log.id !== deletedId)
+      );
+    },
+  });
+
   useEffect(() => {
     const addNewLog = (newLog: LogItem) => {
       queryClient.setQueryData<LogItem[]>(["logs", date?.date], (old) => [...(old || []), newLog]);
@@ -139,6 +155,26 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
         ) : (
           visibleLogs.map((logItem) => (
             <div key={logItem.id} className="p-4 bg-[rgb(var(--color-bg-tertiary))] relative">
+              {editingId !== logItem.id && (
+                <div className="absolute top-2 right-2 flex gap-2">
+                  <Button
+                    onClick={() => {
+                      setEditingId(logItem.id);
+                      setEditedDescription(logItem.description);
+                    }}
+                    variant="tertiary"
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    onClick={() => deleteLogMutation.mutate(logItem.id)}
+                    variant="delete"
+                  >
+                    Delete
+                  </Button>
+                </div>
+              )}
+
               <h3 className="font-bold text-lg mb-1">{logItem.title}</h3>
               <p>⏱ Time Left: {logItem.timer_leftover}</p>
 
@@ -168,15 +204,6 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
               ) : (
                 <div className="mb-2">
                   <p className="whitespace-pre-wrap">📘 {logItem.description}</p>
-                  <button
-                    onClick={() => {
-                      setEditingId(logItem.id);
-                      setEditedDescription(logItem.description);
-                    }}
-                    className="text-sm text-blue-500 underline"
-                  >
-                    Edit
-                  </button>
                 </div>
               )}
 

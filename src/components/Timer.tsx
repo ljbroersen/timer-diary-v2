@@ -170,7 +170,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             />
             <span className={task.checked ? "line-through" : ""}>{task.text}</span>
             {showInputs && (
-              <Button variant="danger"
+              <Button variant="delete"
                 onClick={() => handleDeleteTask(index)}
               >
                 X
