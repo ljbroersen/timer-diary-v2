@@ -1,13 +1,6 @@
 import Calendar from "react-calendar";
-import { type DateRecord } from "./Diary";
+import type { NavigationProps } from "../types/types";
 import "../calendar.css"
-
-interface NavigationProps {
-  dates: DateRecord[];
-  selectedDate: Date | null;
-  setSelectedDate: (date: Date) => void;
-  setVisibleLogIndex?: (index: number) => void;
-}
 
 function formatDate(date: Date): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(

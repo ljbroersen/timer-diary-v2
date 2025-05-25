@@ -2,16 +2,7 @@ import { useTimer } from "react-timer-hook";
 import { useState } from "react";
 import "../index.css";
 import Button from "./Button";
-
-interface MyTimerProps {
-  expiryTimestamp?: Date;
-  onRestart?: (
-    difference: string,
-    title: string,
-    description: string,
-    tasks: { text: string; checked: boolean }[]
-  ) => void;
-}
+import type { MyTimerProps, Task } from "../types/types";
 
 export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerProps>) {
   const [showInputs, setShowInputs] = useState<boolean>(true);
@@ -23,7 +14,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
   const [title, setTitle] = useState<string>("");
   const [timerDescription, setTimerDescription] = useState<string>("");
 
-  const [tasks, setTasks] = useState<Array<{ text: string; checked: boolean }>>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskText, setNewTaskText] = useState<string>("");
 
   const { seconds, minutes, hours, isRunning, start, pause, resume, restart } = useTimer({

@@ -1,7 +1,4 @@
-type ArrowProps = {
-  onClick?: () => void;
-  className?: string;
-};
+import type { ArrowProps } from "../types/types"
 
 export const ArrowUp: React.FC<ArrowProps> = ({ onClick, className }) => (
   <div className={`cursor-pointer ${className}`} onClick={onClick}>

@@ -3,28 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ArrowDown } from "./ArrowDown";
 import { ArrowUp } from "./ArrowUp";
 import Button from "./Button";
-
-interface MyLogProps {
-  URL: string;
-  date: DateRecord;
-  setDiaryDates: (dates: DateRecord[]) => void;
-  setAddLog: (addLog: (log: LogItem) => void) => void;
-}
-
-export type LogItem = {
-  id: number;
-  date_id: number;
-  date: string;
-  timer_leftover: string;
-  title: string;
-  description: string;
-  tasks: { text: string; checked: boolean }[];
-};
-
-export type DateRecord = {
-  id: number;
-  date: string;
-};
+import type { LogItem, DateRecord, MyLogProps } from "../types/types";
 
 export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<MyLogProps>) {
   const logsPerPage = 2;

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import Timer from "./Timer";
-import Diary, { type LogItem, type DateRecord } from "./Diary";
+import Diary from "./Diary";
 import Navigation from "./Navigation";
 import { port } from "../../server/config";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Button from "./Button";
+import type { LogItem, DateRecord } from "../types/types";
 
 const URL = `http://localhost:${port}`;
 
