@@ -10,6 +10,7 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
   const [visibleLogIndex, setVisibleLogIndex] = useState(0);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editedDescription, setEditedDescription] = useState("");
+  const [expandedLogIds, setExpandedLogIds] = useState<Set<number>>(new Set());
 
   const queryClient = useQueryClient();
 
@@ -106,6 +107,18 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
     setEditingId(null);
   };
 
+  const toggleExpanded = (id: number) => {
+    setExpandedLogIds((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
+
   const showMoreLogs = () => {
     setVisibleLogIndex((prev) => Math.min(prev + logsPerPage, logs.length - logsPerPage));
   };
@@ -134,78 +147,88 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
         ) : (
           visibleLogs.map((logItem) => (
             <div key={logItem.id} className="p-4 bg-[rgb(var(--color-bg-tertiary))] relative">
-              {editingId !== logItem.id && (
-                <div className="absolute top-2 right-2 flex gap-2">
-                  <Button
-                    onClick={() => {
-                      setEditingId(logItem.id);
-                      setEditedDescription(logItem.description);
-                    }}
-                    variant="tertiary"
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    onClick={() => deleteLogMutation.mutate(logItem.id)}
-                    variant="delete"
-                  >
-                    Delete
-                  </Button>
-                </div>
-              )}
+              <div
+                onClick={() => toggleExpanded(logItem.id)}
+                className="cursor-pointer font-bold text-lg mb-1 hover:underline"
+              >
+                {logItem.title}
+              </div>
 
-              <h3 className="font-bold text-lg mb-1">{logItem.title}</h3>
-              <p>⏱ Time Left: {logItem.timer_leftover}</p>
+              {expandedLogIds.has(logItem.id) && (
+                <>
+                  {editingId !== logItem.id && (
+                    <div className="absolute top-2 right-2 flex gap-2">
+                      <Button
+                        onClick={() => {
+                          setEditingId(logItem.id);
+                          setEditedDescription(logItem.description);
+                        }}
+                        variant="tertiary"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        onClick={() => deleteLogMutation.mutate(logItem.id)}
+                        variant="delete"
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  )}
 
-              {editingId === logItem.id ? (
-                <div className="mb-2">
-                  <textarea
-                    className="w-full p-2 border rounded text-black"
-                    rows={3}
-                    value={editedDescription}
-                    onChange={(e) => setEditedDescription(e.target.value)}
-                  />
-                  <div className="mt-1 flex gap-2">
-                    <button
-                      onClick={() => handleSaveDescription(logItem.id)}
-                      className="bg-green-500 px-3 py-1 rounded text-white"
-                    >
-                      Save
-                    </button>
-                    <button
-                      onClick={() => setEditingId(null)}
-                      className="bg-gray-500 px-3 py-1 rounded text-white"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="mb-2">
-                  <p className="whitespace-pre-wrap">📘 {logItem.description}</p>
-                </div>
-              )}
+                  <p>⏱ Time Left: {logItem.timer_leftover}</p>
 
-              {logItem.tasks?.length > 0 && (
-                <div>
-                  <p className="font-semibold">✅ Tasks:</p>
-                  <ul className="list-disc ml-5">
-                    {logItem.tasks.map((task, i) => (
-                      <li key={i}>
-                        <label className="flex items-center gap-2">
-                          <input
-                            type="checkbox"
-                            checked={task.checked}
-                            onChange={() => handleTaskToggle(logItem, i)}
-                          />
-                          <span className={task.checked ? "line-through text-gray-300" : ""}>
-                            {task.text}
-                          </span>
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                  {editingId === logItem.id ? (
+                    <div className="mb-2">
+                      <textarea
+                        className="w-full p-2 border rounded text-black"
+                        rows={3}
+                        value={editedDescription}
+                        onChange={(e) => setEditedDescription(e.target.value)}
+                      />
+                      <div className="mt-1 flex gap-2">
+                        <button
+                          onClick={() => handleSaveDescription(logItem.id)}
+                          className="bg-green-500 px-3 py-1 rounded text-white"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => setEditingId(null)}
+                          className="bg-gray-500 px-3 py-1 rounded text-white"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mb-2">
+                      <p className="whitespace-pre-wrap">📘 {logItem.description}</p>
+                    </div>
+                  )}
+
+                  {logItem.tasks?.length > 0 && (
+                    <div>
+                      <p className="font-semibold">✅ Tasks:</p>
+                      <ul className="list-disc ml-5">
+                        {logItem.tasks.map((task, i) => (
+                          <li key={i}>
+                            <label className="flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                checked={task.checked}
+                                onChange={() => handleTaskToggle(logItem, i)}
+                              />
+                              <span className={task.checked ? "line-through text-gray-300" : ""}>
+                                {task.text}
+                              </span>
+                            </label>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           ))
