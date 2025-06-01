@@ -119,7 +119,7 @@ export default function Main() {
           </div>
         ) : (
           <>
-            <Button onClick={handleBackToTimer} variant="secondary">
+            <Button onClick={handleBackToTimer} variant="secondary" size="lg" className="w-1/8">
               ← Back to Timer
             </Button>
             <Diary URL={URL} date={selectedDate} setDiaryDates={setDates} setAddLog={setAddLog} />

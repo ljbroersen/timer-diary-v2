@@ -161,7 +161,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             />
             <span className={task.checked ? "line-through" : ""}>{task.text}</span>
             {showInputs && (
-              <Button variant="delete"
+              <Button variant="delete" size="sm"
                 onClick={() => handleDeleteTask(index)}
               >
                 X
@@ -196,7 +196,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
       )}
 
       {showInputs ? (
-        <Button onClick={handleStart}>Start</Button>
+        <Button onClick={handleStart} variant="tertiary" size="lg">Start</Button>
       ) : (
         <div>
           <div>
@@ -209,9 +209,9 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             <p className="my-4">{isRunning ? "Running" : "Not running"}</p>
           </div>
           <div>
-          <Button onClick={pause} variant="primary">Pause</Button>
-          <Button onClick={resume} variant="primary">Resume</Button>
-          <Button onClick={handleRestart} variant="primary">Restart</Button>
+          <Button onClick={pause} className="mx-1" variant="tertiary" size="lg">Pause</Button>
+          <Button onClick={resume} className="mx-1" variant="tertiary" size="lg">Resume</Button>
+          <Button onClick={handleRestart} className="mx-1" variant="tertiary" size="lg">Restart</Button>
         </div></div>
       )}
     </div>

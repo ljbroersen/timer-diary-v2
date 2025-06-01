@@ -1,13 +1,9 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowDown } from "./ArrowDown";
-import { ArrowUp } from "./ArrowUp";
 import Button from "./Button";
 import type { LogItem, DateRecord, MyLogProps } from "../types/types";
 
 export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<MyLogProps>) {
-  const logsPerPage = 2;
-  const [visibleLogIndex, setVisibleLogIndex] = useState(0);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editedDescription, setEditedDescription] = useState("");
   const [expandedLogIds, setExpandedLogIds] = useState<Set<number>>(new Set());
@@ -39,9 +35,7 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
   const {
     data: logs = [],
     isLoading: logsLoading,
-    error: logsError,
-    isSuccess: logsSuccess,
-  } = useQuery<LogItem[]>({
+    error: logsError } = useQuery<LogItem[]>({
     queryKey: ["logs", date?.date],
     queryFn: async () => {
       if (!date) return [];
@@ -52,12 +46,6 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
     enabled: !!date,
     staleTime: 2 * 60 * 1000,
   });
-
-  useEffect(() => {
-    if (logsSuccess) {
-      setVisibleLogIndex(0);
-    }
-  }, [logsSuccess]);
 
   const updateLogMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: number; updates: Partial<LogItem> }) => {
@@ -119,16 +107,6 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
     });
   };
 
-  const showMoreLogs = () => {
-    setVisibleLogIndex((prev) => Math.min(prev + logsPerPage, logs.length - logsPerPage));
-  };
-
-  const showPreviousLogs = () => {
-    setVisibleLogIndex((prev) => Math.max(prev - logsPerPage, 0));
-  };
-
-  const visibleLogs = logs.slice(visibleLogIndex, visibleLogIndex + logsPerPage);
-
   if (datesLoading || logsLoading) return <div>Loading...</div>;
   if (datesError) return <div>Error loading dates: {(datesError as Error).message}</div>;
   if (logsError) return <div>Error loading logs: {(logsError as Error).message}</div>;
@@ -137,15 +115,11 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
     <div className="flex flex-col sm:h-screen sm:mb-10">
       <h3 className="underline-offset-8 underline decoration-white decoration-2">Logs for {date.date}</h3>
 
-      <div className="flex justify-center sticky top-0 z-10 p-2">
-        {visibleLogIndex > 0 && <ArrowUp onClick={showPreviousLogs} />}
-      </div>
-
       <div className="flex-grow overflow-y-auto">
-        {visibleLogs.length === 0 ? (
+        {logs.length === 0 ? (
           <div className="flex items-center justify-center h-full">No logs for this date.</div>
         ) : (
-          visibleLogs.map((logItem) => (
+          logs.map((logItem) => (
             <div key={logItem.id} className="p-4 bg-[rgb(var(--color-bg-tertiary))] relative">
               <div
                 onClick={() => toggleExpanded(logItem.id)}
@@ -233,10 +207,6 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
             </div>
           ))
         )}
-      </div>
-
-      <div className="flex justify-center sticky bottom-0 z-10 p-2">
-        {visibleLogIndex + logsPerPage < logs.length && <ArrowDown onClick={showMoreLogs} />}
       </div>
     </div>
   );
