@@ -6,7 +6,7 @@ import type { LogItem, DateRecord, MyLogProps } from "../types/types";
 export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<MyLogProps>) {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editedDescription, setEditedDescription] = useState("");
-  const [expandedLogIds, setExpandedLogIds] = useState<Set<number>>(new Set());
+  const [expandedLogId, setExpandedLogId] = useState<number | null>(null);
 
   const queryClient = useQueryClient();
 
@@ -97,15 +97,7 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
   };
 
   const toggleExpanded = (id: number) => {
-    setExpandedLogIds((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
-      return newSet;
-    });
+    setExpandedLogId((prev) => (prev === id ? null : id));
   };
 
   if (datesLoading || logsLoading) return <div>Loading...</div>;
@@ -114,23 +106,35 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
 
   return (
     <div className="flex flex-col sm:h-screen sm:mb-10">
-      <h3 className="underline-offset-8 underline decoration-white decoration-2">Logs for {date.date}</h3>
-
-      <div className="flex-grow overflow-y-auto mt-2">
-        {logs.length === 0 ? (
-          <div className="flex items-center justify-center h-full">No logs for this date.</div>
-        ) : (
-          logs.map((logItem) => (
-            <div key={logItem.id} className="p-4 bg-[rgb(var(--color-bg-tertiary))] relative">
-              <div
+      {logs.length === 0 ? (
+        <div className="flexh-full text-md">
+          No logs for this date.
+        </div>
+      ) : (
+        <div className="flex flex-col h-full">
+          <div className="flex overflow-x-auto border-b mb-2">
+            {logs.map((logItem) => (
+              <button
+                key={logItem.id}
                 onClick={() => toggleExpanded(logItem.id)}
-                className="cursor-pointer font-bold text-xl mb-1 hover:underline"
+                className={`px-6 py-3 whitespace-nowrap text-base font-semibold border rounded-t-md mr-2 cursor-pointer ${
+                  expandedLogId === logItem.id
+                    ? "bg-[rgb(var(--color-bg-tertiary))] border-b-transparent"
+                    : "bg-[rgb(var(--color-bg-primary))]"
+                }`}
               >
                 {logItem.title}
-              </div>
-
-              {expandedLogIds.has(logItem.id) && (
-                <>
+              </button>
+            ))}
+          </div>
+          <div className="flex-grow overflow-y-auto">
+            {logs
+              .filter((log) => log.id === expandedLogId)
+              .map((logItem) => (
+                <div
+                  key={logItem.id}
+                  className="p-4 bg-[rgb(var(--color-bg-primary))] border rounded-md relative mb-4"
+                >
                   {editingId !== logItem.id && (
                     <div className="absolute top-2 right-2 flex gap-2">
                       <Button
@@ -156,26 +160,26 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
                     </div>
                     <div className="p-4 w-2/5">
                       <h3 className="font-semibold mb-1 text-left">Tasks:</h3>
-                        {logItem.tasks.length > 0 ? (
-                          <ul className="list-disc ml-5">
-                            {logItem.tasks.map((task, i) => (
-                              <li key={i}>
-                                <label className="flex items-center gap-2 pb-2">
-                                  <input
-                                    type="checkbox"
-                                    checked={task.checked}
-                                    onChange={() => handleTaskToggle(logItem, i)}
-                                  />
-                                  <span className={task.checked ? "line-through text-gray-300" : ""}>
-                                    {task.text}
-                                  </span>
-                                </label>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p>You didn't specify any tasks!</p>
-                        )}
+                      {logItem.tasks.length > 0 ? (
+                        <ul className="list-disc ml-5">
+                          {logItem.tasks.map((task, i) => (
+                            <li key={i}>
+                              <label className="flex items-center gap-2 pb-2">
+                                <input
+                                  type="checkbox"
+                                  checked={task.checked}
+                                  onChange={() => handleTaskToggle(logItem, i)}
+                                />
+                                <span className={task.checked ? "line-through" : ""}>
+                                  {task.text}
+                                </span>
+                              </label>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>You didn't specify any tasks!</p>
+                      )}
                     </div>
                   </div>
                   {editingId === logItem.id ? (
@@ -187,17 +191,10 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
                         onChange={(e) => setEditedDescription(e.target.value)}
                       />
                       <div className="mt-1 flex gap-2">
-                        <Button
-                          onClick={() => handleSaveDescription(logItem.id)}
-                          variant="tertiary"
-                        >
+                        <Button onClick={() => handleSaveDescription(logItem.id)} variant="tertiary">
                           Save
                         </Button>
-                        <Button
-                          onClick={() => setEditingId(null)}
-                        >
-                          Cancel
-                        </Button>
+                        <Button onClick={() => setEditingId(null)}>Cancel</Button>
                       </div>
                     </div>
                   ) : (
@@ -206,12 +203,11 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
                       <p className="whitespace-pre-wrap">{logItem.description}</p>
                     </div>
                   )}
-                </>
-              )}
-            </div>
-          ))
-        )}
-      </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -134,7 +134,7 @@ return (
             </div>
           ) : (
             <>
-              <Button onClick={handleBackToTimer} variant="secondary" size="lg" className="w-fit mb-4">
+              <Button onClick={handleBackToTimer} variant="primary" size="lg" className="w-fit mb-4">
                 ← Back
               </Button>
               <Diary URL={URL} date={selectedDate} setDiaryDates={setDates} setAddLog={setAddLog} />
