@@ -3,16 +3,18 @@
   padding: 10px;
   font-family: "Arial", sans-serif;
   color: black;
-  width: 18vw;
+  width: 100%;
+  max-width: 100%;
+  background: transparent;
+  border: none;
 }
 
 /* Navigation Styles (Month Selector and Arrows) */
 .react-calendar__navigation {
   display: flex;
   flex-wrap: wrap;
-  width: 15vw;
   margin: auto;
-  padding: 8px 0px;
+  padding: 4px 0px;
   align-items: center;
   justify-content: center;
 }
@@ -23,7 +25,7 @@
   border-radius: 4px;
   color: white;
   font-weight: bold;
-  padding: 8px 10px;
+  padding: 6px 8px;
   cursor: pointer;
   margin: 2px;
 }
@@ -34,12 +36,12 @@
 
 /* Day Grid Styles */
 .react-calendar__month-view__days__day {
-  height: 40px;
-  width: 40px;
+  height: 36px;
+  width: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 2px 6px;
+  margin: 2px 5px;
   cursor: pointer;
   transition: background 0.3s;
 }
@@ -51,7 +53,7 @@
 .react-calendar__tile--now {
   background: #90B46C;
   font-weight: bold;
-  border: solid 2px white;
+  border: solid 1px black;
 }
 
 .react-calendar__tile--now:hover {
@@ -68,18 +70,25 @@
   background: #DDEB9D;
 }
 
+/* Highlight Custom Dates */
+.highlight {
+  background: rgba(144, 180, 108, 0.3);
+  border-radius: 0.5rem;
+}
+
 /* Weekday Name Styles */
 .react-calendar__month-view__weekdays {
   font-weight: bold;
-  color: #DDEB9D;
+  color: #708C54;
   text-decoration: underline solid white;
   text-underline-offset: 5px;
+  font-size: 1rem;
 }
 
 .react-calendar__month-view__weekdays__weekday {
   display: flex;
   justify-content: center;
-  margin: 7px 0px 7px -2px;
+  margin: 4px 0px;
 }
 .react-calendar__month-view__weekdays__weekday:first-child {
   margin-left: 5px;
@@ -94,7 +103,7 @@
 .react-calendar__year-view__months__month,
 .react-calendar__decade-view__years__year {
   margin: 4px 0px;
-  padding: 8px 0px;
+  padding: 6px 0px;
 }
 
 @media (max-width: 1639px) {
