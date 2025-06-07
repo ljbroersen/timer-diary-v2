@@ -156,22 +156,26 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
                     </div>
                     <div className="p-4 w-2/5">
                       <h3 className="font-semibold mb-1 text-left">Tasks:</h3>
-                      <ul className="list-disc ml-5">
-                        {logItem.tasks.map((task, i) => (
-                          <li key={i}>
-                            <label className="flex items-center gap-2 pb-2">
-                              <input
-                                type="checkbox"
-                                checked={task.checked}
-                                onChange={() => handleTaskToggle(logItem, i)}
-                              />
-                              <span className={task.checked ? "line-through text-gray-300" : ""}>
-                                {task.text}
-                              </span>
-                            </label>
-                          </li>
-                        ))}
-                      </ul>
+                        {logItem.tasks.length > 0 ? (
+                          <ul className="list-disc ml-5">
+                            {logItem.tasks.map((task, i) => (
+                              <li key={i}>
+                                <label className="flex items-center gap-2 pb-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={task.checked}
+                                    onChange={() => handleTaskToggle(logItem, i)}
+                                  />
+                                  <span className={task.checked ? "line-through text-gray-300" : ""}>
+                                    {task.text}
+                                  </span>
+                                </label>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p>You didn't specify any tasks!</p>
+                        )}
                     </div>
                   </div>
                   {editingId === logItem.id ? (

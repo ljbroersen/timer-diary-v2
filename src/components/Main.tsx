@@ -99,33 +99,49 @@ export default function Main() {
   ).padStart(2, "0")}`;
 }
 
-  return (
-    <div className="min-h-screen grid grid-cols-[400px_1fr] mx-12 mb-12 bg-[rgb(var(--color-bg-primary))] text-[rgb(var(--color-text-base))]">
-      <nav className="bg-[rgb(var(--color-bg-secondary))] p-4">
-        <Navigation
-          dates={dates}
-          selectedDate={selectedCalendarDate}
-          setSelectedDate={(date) => {
-          setSelectedCalendarDate(date);
-          setSelectedDate({ id: -1, date: formatDate(date) }); // This is still valid for your logs
-            }}
-        />
-      </nav>
+return (
+  <div className="min-h-screen bg-[rgb(var(--color-bg-primary))] text-[rgb(var(--color-text-base))] flex items-center justify-center p-4">
+    <div className="w-full max-w-[95vw] h-[850px] border rounded-xl shadow-lg overflow-hidden flex flex-col">
+      
+      <div className="flex items-center justify-between bg-[rgb(var(--color-bg-secondary))] px-4 py-2">
+        <div className="flex space-x-2">
+          <div className="w-3 h-3 rounded-full bg-red-500"></div>
+          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+          <div className="w-3 h-3 rounded-full bg-green-500"></div>
+        </div>
+        <div className="flex-1 mx-4 bg-[rgb(var(--color-bg-primary))] rounded px-4 py-1 text-sm text-center text-[rgb(var(--color-text-muted))] overflow-hidden whitespace-nowrap text-ellipsis">
+          http://localhost:{port}
+        </div>
+        <div className="w-12"></div>
+      </div>
 
-      <div className="flex flex-col min-h-screen bg-[rgb(var(--color-bg-secondary))] px-6 pt-6">
-        {!selectedDate ? (
-          <div className="flex justify-center text-center">
-            <Timer onRestart={handleRestart} />
-          </div>
-        ) : (
-          <>
-            <Button onClick={handleBackToTimer} variant="secondary" size="lg" className="w-1/8">
-              ← Back to Timer
-            </Button>
-            <Diary URL={URL} date={selectedDate} setDiaryDates={setDates} setAddLog={setAddLog} />
-          </>
-        )}
+      <div className="flex flex-col lg:grid lg:grid-cols-[minmax(250px,400px)_1fr] flex-1 overflow-hidden">
+        <nav className="bg-[rgb(var(--color-bg-secondary))] p-4 overflow-y-auto">
+          <Navigation
+            dates={dates}
+            selectedDate={selectedCalendarDate}
+            setSelectedDate={(date) => {
+              setSelectedCalendarDate(date);
+              setSelectedDate({ id: -1, date: formatDate(date) });
+            }}
+          />
+        </nav>
+
+        <div className="flex flex-col bg-[rgb(var(--color-bg-secondary))] px-4 py-4 overflow-y-auto">
+          {!selectedDate ? (
+            <div className="flex justify-center text-center">
+              <Timer onRestart={handleRestart} />
+            </div>
+          ) : (
+            <>
+              <Button onClick={handleBackToTimer} variant="secondary" size="lg" className="w-fit mb-4">
+                ← Back
+              </Button>
+              <Diary URL={URL} date={selectedDate} setDiaryDates={setDates} setAddLog={setAddLog} />
+            </>
+          )}
+        </div>
       </div>
     </div>
-  );
-}
+  </div>
+)}
