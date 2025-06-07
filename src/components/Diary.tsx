@@ -30,12 +30,13 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
       const sorted = dates.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       setDiaryDates(sorted);
     }
-  }, [datesSuccess, dates]);
+  }, [datesSuccess, dates, setDiaryDates]);
 
   const {
     data: logs = [],
     isLoading: logsLoading,
-    error: logsError } = useQuery<LogItem[]>({
+    error: logsError,
+  } = useQuery<LogItem[]>({
     queryKey: ["logs", date?.date],
     queryFn: async () => {
       if (!date) return [];
@@ -115,7 +116,7 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
     <div className="flex flex-col sm:h-screen sm:mb-10">
       <h3 className="underline-offset-8 underline decoration-white decoration-2">Logs for {date.date}</h3>
 
-      <div className="flex-grow overflow-y-auto">
+      <div className="flex-grow overflow-y-auto mt-2">
         {logs.length === 0 ? (
           <div className="flex items-center justify-center h-full">No logs for this date.</div>
         ) : (
@@ -123,7 +124,7 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
             <div key={logItem.id} className="p-4 bg-[rgb(var(--color-bg-tertiary))] relative">
               <div
                 onClick={() => toggleExpanded(logItem.id)}
-                className="cursor-pointer font-bold text-lg mb-1 hover:underline"
+                className="cursor-pointer font-bold text-xl mb-1 hover:underline"
               >
                 {logItem.title}
               </div>
@@ -149,45 +150,16 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
                       </Button>
                     </div>
                   )}
-
-                  <p>⏱ Time Left: {logItem.timer_leftover}</p>
-
-                  {editingId === logItem.id ? (
-                    <div className="mb-2">
-                      <textarea
-                        className="w-full p-2 border rounded text-black"
-                        rows={3}
-                        value={editedDescription}
-                        onChange={(e) => setEditedDescription(e.target.value)}
-                      />
-                      <div className="mt-1 flex gap-2">
-                        <button
-                          onClick={() => handleSaveDescription(logItem.id)}
-                          className="bg-green-500 px-3 py-1 rounded text-white"
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={() => setEditingId(null)}
-                          className="bg-gray-500 px-3 py-1 rounded text-white"
-                        >
-                          Cancel
-                        </button>
-                      </div>
+                  <div className="flex flex-row mb-4">
+                    <div className="flex items-center p-4 rounded w-3/5">
+                      <p className="text-5xl font-bold">{logItem.timer_leftover}</p>
                     </div>
-                  ) : (
-                    <div className="mb-2">
-                      <p className="whitespace-pre-wrap">📘 {logItem.description}</p>
-                    </div>
-                  )}
-
-                  {logItem.tasks?.length > 0 && (
-                    <div>
-                      <p className="font-semibold">✅ Tasks:</p>
+                    <div className="p-4 w-2/5">
+                      <h3 className="font-semibold mb-1 text-left">Tasks:</h3>
                       <ul className="list-disc ml-5">
                         {logItem.tasks.map((task, i) => (
                           <li key={i}>
-                            <label className="flex items-center gap-2">
+                            <label className="flex items-center gap-2 pb-2">
                               <input
                                 type="checkbox"
                                 checked={task.checked}
@@ -200,6 +172,34 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
                           </li>
                         ))}
                       </ul>
+                    </div>
+                  </div>
+                  {editingId === logItem.id ? (
+                    <div className="mb-2">
+                      <textarea
+                        className="w-full p-2 border rounded text-black"
+                        rows={3}
+                        value={editedDescription}
+                        onChange={(e) => setEditedDescription(e.target.value)}
+                      />
+                      <div className="mt-1 flex gap-2">
+                        <Button
+                          onClick={() => handleSaveDescription(logItem.id)}
+                          variant="tertiary"
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          onClick={() => setEditingId(null)}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mb-2">
+                      <h3 className="font-bold">Description</h3>
+                      <p className="whitespace-pre-wrap">{logItem.description}</p>
                     </div>
                   )}
                 </>
