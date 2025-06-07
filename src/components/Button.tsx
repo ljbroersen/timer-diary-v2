@@ -23,7 +23,7 @@ export default function Button({
   className,
 }: Readonly<ButtonProps>) {
   const baseClasses =
-    "cursor-pointer transition-colors rounded font-medium inline-flex items-center justify-center";
+    "cursor-pointer transition-colors rounded-xl font-medium inline-flex items-center justify-center border border-black shadow-md";
 
   const variantClasses: Record<string, string> = {
     primary:

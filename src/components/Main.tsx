@@ -103,7 +103,7 @@ return (
   <div className="min-h-screen bg-[rgb(var(--color-bg-primary))] text-[rgb(var(--color-text-base))] flex items-center justify-center p-4">
     <div className="w-full max-w-[95vw] h-[850px] border rounded-xl shadow-lg overflow-hidden flex flex-col">
       
-      <div className="flex items-center justify-between bg-[rgb(var(--color-bg-secondary))] px-4 py-2">
+      <div className="flex items-center justify-between bg-[rgb(var(--color-bg-secondary))] px-4 py-2 border-b border-[rgb(var(--color-border-muted))] shadow-sm">
         <div className="flex space-x-2">
           <div className="w-3 h-3 rounded-full bg-red-500"></div>
           <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -118,12 +118,13 @@ return (
       <div className="flex flex-col lg:grid lg:grid-cols-[minmax(250px,400px)_1fr] flex-1 overflow-hidden">
         <nav className="bg-[rgb(var(--color-bg-secondary))] p-4 overflow-y-auto">
           <Navigation
-            dates={dates}
+            URL={URL}
             selectedDate={selectedCalendarDate}
             setSelectedDate={(date) => {
               setSelectedCalendarDate(date);
               setSelectedDate({ id: -1, date: formatDate(date) });
             }}
+            setDiaryDates={setDates}
           />
         </nav>
 

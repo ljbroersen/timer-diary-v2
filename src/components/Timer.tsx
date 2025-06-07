@@ -73,7 +73,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
 
   return (
     <div>
-      <h2 className="mb-4">Timer</h2>
+      <h2 className="mb-4 text-lg font-semibold">Timer</h2>
 
       {showInputs && (
         <>
@@ -81,7 +81,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             <input
               key={unit}
               type="number"
-              className="ml-2 mr-2 p-2 bg-[rgb(var(--color-secondary))]"
+              className="ml-2 mr-2 p-2 border border-black shadow-md rounded-xl bg-[rgb(var(--color-secondary))]"
               placeholder={unit.charAt(0).toUpperCase() + unit.slice(1)}
               value={customTime[unit as keyof typeof customTime]}
               onChange={(e) => updateCustomTime(unit as any, e.target.value)}
@@ -92,7 +92,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             <h3>Title</h3>
             <input
               type="text"
-              className="ml-2 mr-2 mb-2 p-2 w-full max-w-xl bg-[rgb(var(--color-secondary))]"
+              className="ml-2 mr-2 mb-2 p-2 w-full max-w-xl border border-black shadow-md rounded-xl bg-[rgb(var(--color-secondary))]"
               placeholder="Title for this entry"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -102,7 +102,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
           <div className="my-4">
             <h3>Description of activity</h3>
             <textarea
-              className="mx-2 p-2 w-full max-w-xl bg-[rgb(var(--color-secondary))]"
+              className="mx-2 p-2 w-full max-w-xl border border-black shadow-md rounded-xl bg-[rgb(var(--color-secondary))]"
               placeholder="What are you going to do?"
               value={timerDescription}
               onChange={(e) => setTimerDescription(e.target.value)}
@@ -132,10 +132,10 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             ))}
 
             {showInputs && (
-              <div className="flex gap-2 my-4">
+              <div className="flex gap-2">
                 <input
                   type="text"
-                  className="p-1 bg-[rgb(var(--color-secondary))] flex-1"
+                  className="p-2 border border-black shadow-md rounded-xl bg-[rgb(var(--color-secondary))] flex-1"
                   placeholder="New task"
                   value={newTaskText}
                   onChange={(e) => setNewTaskText(e.target.value)}
