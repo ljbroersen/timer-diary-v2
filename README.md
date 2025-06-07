@@ -13,10 +13,14 @@
 
 ## Project Setup
 ### Prerequisites
-Ensure you have the following installed:
+Ensure you have the following installed and/or created:
 
 - **Node.js** (v22.6.0+)
 - **npm** (v10.8.2+)
+- A **PostgreSQL** database for this project
+
+There is a sample environment file provided in the repository.
+Please change the name from `.env.sample` to `.env.local` and change the credentials to your own.
 
 ### Installation
 1. **Clone the repository**:
@@ -36,7 +40,25 @@ npm run dev
 ```
 The application will be accessible at `http://localhost:5173`.
 
-## Deployment
+4. **Run migrations**:
+To build the database schema and apply all available migrations:
+```
+npm run migrate-latest
+```
+
+5. **Start the server**:
+```
+npm run start
+```
+The server will be accessible at `http://localhost:10000`.
+
+#### Rolling back migrations:
+If you need to undo the most recent migration:
+```
+npm run migrate-down
+```
+
+#### Deployment:
 For production, build the application:
 ```
 npm run build
