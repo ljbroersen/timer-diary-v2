@@ -156,7 +156,7 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
                   )}
                   <div className="flex flex-row mb-4">
                     <div className="flex items-center p-4 rounded w-3/5">
-                      <p className="text-5xl font-bold">{logItem.timer_leftover}</p>
+                      <p className="text-5xl font-bold">{logItem.session_duration}</p>
                     </div>
                     <div className="p-4 w-2/5">
                       <h3 className="font-semibold mb-1 text-left">Tasks:</h3>

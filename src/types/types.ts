@@ -14,7 +14,7 @@ export type LogItem = {
   id: number;
   date_id: number;
   date: string;
-  timer_leftover: string;
+  session_duration: string;
   title: string;
   description: string;
   tasks: { text: string; checked: boolean }[];

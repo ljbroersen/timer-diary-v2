@@ -50,18 +50,18 @@ app.get("/logs", async (req, res) => {
 
 
 app.post("/logs/create", async (req, res) => {
-  const { date, timer_leftover, description, title, tasks } = req.body;
+  const { date, session_duration, description, title, tasks } = req.body;
 
   if (
     !date ||
-    !timer_leftover ||
+    !session_duration ||
     !description ||
     !title ||
     !Array.isArray(tasks)
   ) {
     res.status(400).json({
       message:
-        "Missing required fields: date, timer_leftover, description, title, tasks",
+        "Missing required fields: date, session_duration, description, title, tasks",
     });
     return;
   }
@@ -78,7 +78,7 @@ app.post("/logs/create", async (req, res) => {
     const [newLog] = await knex("logs_table")
       .insert({
         date_id: dateRecord.id,
-        timer_leftover,
+        session_duration,
         description,
         title,
         tasks: JSON.stringify(tasks),

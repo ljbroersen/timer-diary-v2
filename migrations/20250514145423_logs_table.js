@@ -8,7 +8,7 @@ export function up(knex) {
     table.integer("date_id").unsigned().notNullable();
     table.foreign("date_id").references("id").inTable("date_table").onDelete("CASCADE");
 
-    table.string("timer_leftover", 255);
+    table.string("session_duration", 255);
     table.string("description", 255);
 
     table.string("title", 255);

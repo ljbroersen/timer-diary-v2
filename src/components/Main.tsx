@@ -21,7 +21,7 @@ export default function Main() {
   const createLogMutation = useMutation({
     mutationFn: async (newLog: {
       date: string;
-      timer_leftover: string;
+      session_duration: string;
       title: string;
       description: string;
       tasks: { text: string; checked: boolean }[];
@@ -82,7 +82,7 @@ export default function Main() {
 
     createLogMutation.mutate({
       date: formattedDate,
-      timer_leftover: difference,
+      session_duration: difference,
       title: title.trim() || "Untitled",
       description: description.trim() || "No description provided",
       tasks,
