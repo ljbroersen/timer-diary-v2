@@ -74,7 +74,6 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
   return (
     <div>
       <h2 className="mb-4 text-lg font-semibold">Timer</h2>
-
       {showInputs && (
         <>
           {["hours", "minutes", "seconds"].map((unit) => (
@@ -87,7 +86,6 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
               onChange={(e) => updateCustomTime(unit as any, e.target.value)}
             />
           ))}
-
           <div className="my-4">
             <h3>Title</h3>
             <input
@@ -98,7 +96,6 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
-
           <div className="my-4">
             <h3>Description of activity</h3>
             <textarea
@@ -112,41 +109,57 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
           </div>
         </>
       )}
-
       {(showInputs || tasks.length > 0) && (
         <div className="my-4">
-          <h3>Subtasks</h3>
-          <div className="ml-2 my-2">
-            {tasks.map((task, i) => (
-              <div key={i} className="flex items-center gap-2 my-2">
-                <input
-                  type="checkbox"
-                  checked={task.checked}
-                  onChange={() => handleTaskChange(i)}
-                />
-                <span className={task.checked ? "line-through" : ""}>{task.text}</span>
-                {showInputs && (
-                  <Button variant="delete" size="sm" onClick={() => handleTaskDelete(i)}>X</Button>
-                )}
-              </div>
-            ))}
-
-            {showInputs && (
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  className="p-2 border border-black shadow-md rounded-xl bg-[rgb(var(--color-secondary))] flex-1"
-                  placeholder="New task"
-                  value={newTaskText}
-                  onChange={(e) => setNewTaskText(e.target.value)}
-                />
-                <Button onClick={addTask}>Add</Button>
-              </div>
-            )}
+          <h3 className="mb-2 font-semibold text-lg">Subtasks</h3>
+          <div className="flex justify-center">
+            <div className="space-y-2 w-1/2">
+              {tasks.map((task, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 p-3 rounded-xl shadow-sm bg-[rgb(var(--color-bg-primary))]"
+                >
+                  {!showInputs && (
+                    <input
+                      type="checkbox"
+                      checked={task.checked}
+                      onChange={() => handleTaskChange(i)}
+                      className="w-5 h-5 cursor-pointer accent-[rgb(var(--color-accent))]"
+                    />
+                  )}
+                  <span className="text-[rgb(var(--color-text-base))] text-lg">
+                    {task.text}
+                  </span>
+                  {showInputs && (
+                    <Button
+                      variant="delete"
+                      size="sm"
+                      onClick={() => handleTaskDelete(i)}
+                      className="flex-shrink-0"
+                    >
+                      X
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
+          {showInputs && (
+            <div className="flex justify-center gap-2 mt-3 ml-2">
+              <input
+                type="text"
+                className="p-2 border border-black shadow-md rounded-xl bg-[rgb(var(--color-secondary))] flex-1"
+                placeholder="New task"
+                value={newTaskText}
+                onChange={(e) => setNewTaskText(e.target.value)}
+              />
+              <Button onClick={addTask} variant="primary" size="md">
+                Add
+              </Button>
+            </div>
+          )}
         </div>
       )}
-
       {showInputs ? (
         <Button onClick={handleStart} variant="tertiary" size="lg">Start</Button>
       ) : (

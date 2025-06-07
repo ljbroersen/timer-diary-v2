@@ -161,7 +161,7 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
                     <div className="p-4 w-2/5">
                       <h3 className="font-semibold mb-1 text-left">Tasks:</h3>
                       {logItem.tasks.length > 0 ? (
-                        <ul className="list-disc ml-5">
+                        <ul>
                           {logItem.tasks.map((task, i) => (
                             <li key={i}>
                               <label className="flex items-center gap-2 pb-2">

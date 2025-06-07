@@ -69,10 +69,10 @@ app.post("/logs/create", async (req, res) => {
   try {
     let dateRecord = await knex("date_table").where({ date }).first();
     if (!dateRecord) {
-      const [newDateId] = await knex("date_table")
+      const [{ id }] = await knex("date_table")
         .insert({ date })
         .returning("id");
-      dateRecord = { id: newDateId };
+      dateRecord = { id };
     }
 
     const [newLog] = await knex("logs_table")

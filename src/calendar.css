@@ -55,6 +55,7 @@
   background: #90B46C;
   font-weight: bold;
   border: solid 1px black;
+  border-radius: 0.5rem;
 }
 
 .react-calendar__tile--now:hover {
