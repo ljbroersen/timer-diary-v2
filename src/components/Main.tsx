@@ -69,7 +69,7 @@ export default function Main() {
     },
   });
 
-  const handleRestart = (
+  const handleFinish = (
     difference: string,
     title: string,
     description: string,
@@ -83,8 +83,8 @@ export default function Main() {
     createLogMutation.mutate({
       date: formattedDate,
       session_duration: difference,
-      title: title.trim() || "Untitled",
-      description: description.trim() || "No description provided",
+      title: title|| "Untitled",
+      description: description || "No description provided",
       tasks,
     });
   };
@@ -131,7 +131,7 @@ return (
         <div className="flex flex-col bg-[rgb(var(--color-bg-secondary))] px-4 py-4 overflow-y-auto">
           {!selectedDate ? (
             <div className="flex justify-center text-center">
-              <Timer onRestart={handleRestart} />
+              <Timer onFinish={handleFinish} />
             </div>
           ) : (
             <>

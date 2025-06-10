@@ -39,7 +39,7 @@ export interface Task {
 
 export interface MyTimerProps {
   expiryTimestamp?: Date;
-  onRestart?: (
+  onFinish?: (
     difference: string,
     title: string,
     description: string,

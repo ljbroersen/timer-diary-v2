@@ -1,16 +1,17 @@
 import { useTimer } from "react-timer-hook";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import "../index.css";
 import Button from "./Button";
 import type { MyTimerProps, Task } from "../types/types";
 
-export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerProps>) {
+export default function Timer({ expiryTimestamp, onFinish }: Readonly<MyTimerProps>) {
   const [showInputs, setShowInputs] = useState(true);
   const [customTime, setCustomTime] = useState({ hours: 0, minutes: 0, seconds: 0 });
   const [title, setTitle] = useState("");
   const [timerDescription, setTimerDescription] = useState("");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskText, setNewTaskText] = useState("");
+  const [showTimeUpModal, setShowTimeUpModal] = useState(false);
 
   const { seconds, minutes, hours, isRunning, start, pause, resume, restart } = useTimer({
     expiryTimestamp: expiryTimestamp || new Date(),
@@ -39,12 +40,12 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
     }
   };
 
-  const handleRestart = () => {
+  const handleFinish = () => {
     const timeLeftMs = hours * 3600000 + minutes * 60000 + seconds * 1000;
     const timeSpentMs = totalTimerDurationMs - timeLeftMs;
     const formattedTimeSpent = formatTime(timeSpentMs);
 
-    onRestart?.(formattedTimeSpent, title, timerDescription, tasks);
+    onFinish?.(formattedTimeSpent, title, timerDescription, tasks);
 
     setShowInputs(true);
     setTitle("");
@@ -61,8 +62,8 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
   };
 
   const addTask = () => {
-    if (newTaskText.trim()) {
-      setTasks([...tasks, { text: newTaskText.trim(), checked: false }]);
+    if (newTaskText) {
+      setTasks([...tasks, { text: newTaskText, checked: false }]);
       setNewTaskText("");
     }
   };
@@ -70,6 +71,12 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
   const updateCustomTime = (unit: "hours" | "minutes" | "seconds", value: string) => {
     setCustomTime({ ...customTime, [unit]: value === "" ? 0 : parseInt(value) });
   };
+
+  useEffect(() => {
+  if (!isRunning && hours === 0 && minutes === 0 && seconds === 0 && !showInputs) {
+    setShowTimeUpModal(true);
+  }
+}, [hours, minutes, seconds, isRunning, showInputs]);
 
   return (
     <div>
@@ -87,7 +94,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             />
           ))}
           <div className="my-4">
-            <h3>Title</h3>
+            <h3 className="mb-2 font-semibold text-lg">Title</h3>
             <input
               type="text"
               className="ml-2 mr-2 mb-2 p-2 w-full max-w-xl border border-black shadow-md rounded-xl bg-[rgb(var(--color-secondary))]"
@@ -97,7 +104,7 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
             />
           </div>
           <div className="my-4">
-            <h3>Description of activity</h3>
+            <h3 className="mb-2 font-semibold text-lg">Description of activity</h3>
             <textarea
               className="mx-2 p-2 w-full max-w-xl border border-black shadow-md rounded-xl bg-[rgb(var(--color-secondary))]"
               placeholder="What are you going to do?"
@@ -166,15 +173,26 @@ export default function Timer({ expiryTimestamp, onRestart }: Readonly<MyTimerPr
         <>
           <div>
             <h3>{title}</h3>
-            <p className="text-5xl my-2">{`${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`}</p>
-            <p className="my-4">{isRunning ? "Running" : "Not running"}</p>
+            <p className="text-7xl my-2">{`${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`}</p>
+            <p className="text-lg my-4">{isRunning ? "Running..." : "Not running"}</p>
           </div>
           <div>
             <Button onClick={pause} className="mx-1" variant="tertiary" size="lg">Pause</Button>
             <Button onClick={resume} className="mx-1" variant="tertiary" size="lg">Resume</Button>
-            <Button onClick={handleRestart} className="mx-1" variant="tertiary" size="lg">Restart</Button>
+            <Button onClick={handleFinish} className="mx-1" variant="tertiary" size="lg">Finish</Button>
           </div>
         </>
+      )}
+      {showTimeUpModal && (
+        <div className="fixed inset-0 bg-[rgb(var(--color-bg-tertiary))]/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-[rgb(var(--color-bg-primary))] rounded-2xl shadow-xl max-w-md w-full p-6 text-center">
+            <h2 className="text-2xl font-bold mb-4 text-[rgb(var(--color-text-base))]">Done!</h2>
+            <p className="mb-6 text-[rgb(var(--color-text-base))]">The timer has ended. Please take a break!</p>
+            <Button onClick={() => setShowTimeUpModal(false)} variant="primary" size="md">
+              Close
+            </Button>
+          </div>
+        </div>
       )}
     </div>
   );

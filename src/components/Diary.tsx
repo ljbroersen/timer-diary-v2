@@ -123,6 +123,7 @@ export default function Diary({ URL, date, setDiaryDates, setAddLog }: Readonly<
                     : "bg-[rgb(var(--color-bg-primary))]"
                 }`}
               >
+                {/* #TODO: Edit title */}
                 {logItem.title}
               </button>
             ))}

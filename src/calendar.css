@@ -1,7 +1,7 @@
 /* General Calendar Styles */
 .react-calendar {
   padding: 10px;
-  font-family: "Arial", sans-serif;
+  font-family: sans-serif;
   color: black;
   width: 100%;
   max-width: 100%;
@@ -21,9 +21,8 @@
 
 .react-calendar__navigation button {
   background: #708C54;
-  border: solid 1px;
+  border: solid 1px black;
   border-radius: 0.5rem;
-  border-color: black;
   color: white;
   font-weight: bold;
   padding: 6px 8px;
@@ -64,9 +63,8 @@
 
 .react-calendar__tile--active {
   background: #607848;
-  border: solid 1px;
+  border: solid 1px black;
   border-radius: 0.5rem;
-  border-color: black;
   color: white;
   font-weight: bold;
 }
@@ -103,9 +101,8 @@
 .react-calendar__tile:hover {
   background: #607848;
   color: white;
-  border: solid 1px;
+  border: solid 1px black;
   border-radius: 0.5rem;
-  border-color: black;
 }
 
 .react-calendar__year-view__months__month,
